@@ -1,3 +1,4 @@
 altair
-pandas
+h1st
 streamlit
+xgboost
