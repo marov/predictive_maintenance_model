@@ -6,13 +6,19 @@ Environment is using conda. To install conda, follow the instructions [here](htt
 You can then create a new environment using the following command:
 
 ```bash
-conda env create --prefix ./.conda --file environment.yml
+conda env create --prefix ./.conda --file environment.yaml
 ```
 
 where `<env>` is the name of the environment you want to create. You can then activate the environment using:
 
 ```bash
 conda activate ./.conda
+```
+
+To export the environment (to add new packages), use:
+
+```bash
+conda env export --file environment.yaml
 ```
 
 ## Notebooks
