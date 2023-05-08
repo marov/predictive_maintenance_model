@@ -1,4 +1,4 @@
-name: .conda
+name: /Users/mike/Documents/Interviews/Aitomatic/predictive_maintenance_model/.conda
 channels:
   - conda-forge
   - defaults
@@ -171,4 +171,4 @@ dependencies:
     - wrapt==1.14.1
     - xgboost==1.7.5
     - yarl==1.9.2
-prefix: .conda
+prefix: /Users/mike/Documents/Interviews/Aitomatic/predictive_maintenance_model/.conda
