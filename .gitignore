@@ -153,6 +153,7 @@ cython_debug/
 
 # Conda
 .conda/
+condaenv*
 
 notebooks/*.csv
 notebooks/*.pkl

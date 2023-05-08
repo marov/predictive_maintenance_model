@@ -1,4 +1,4 @@
-name: myconda
+name: conda
 channels:
   - conda-forge
   - defaults
@@ -9,19 +9,19 @@ dependencies:
   - backports=1.0=pyhd8ed1ab_3
   - backports.functools_lru_cache=1.6.4=pyhd8ed1ab_0
   - bzip2=1.0.8=h1de35cc_0
-  - ca-certificates=2022.12.7=h033912b_0
+  - ca-certificates=2023.5.7=h8857fd0_0
   - comm=0.1.3=pyhd8ed1ab_0
   - debugpy=1.6.7=py310h7a76584_0
   - decorator=5.1.1=pyhd8ed1ab_0
   - executing=1.2.0=pyhd8ed1ab_0
   - importlib-metadata=6.6.0=pyha770c72_0
   - importlib_metadata=6.6.0=hd8ed1ab_0
-  - ipykernel=6.22.0=pyh736e0ef_0
+  - ipykernel=6.23.0=pyh736e0ef_0
   - ipython=8.13.2=pyhd1c38e8_0
   - jedi=0.18.2=pyhd8ed1ab_0
   - jupyter_client=8.2.0=pyhd8ed1ab_0
   - jupyter_core=5.3.0=py310h2ec42d9_0
-  - libcxx=16.0.2=hd57cbcb_0
+  - libcxx=16.0.3=hd57cbcb_0
   - libffi=3.4.2=hecd8cb5_6
   - libsodium=1.0.18=hbcb3906_1
   - matplotlib-inline=0.1.6=pyhd8ed1ab_0
@@ -71,7 +71,7 @@ dependencies:
     - attrs==23.1.0
     - botocore==1.29.76
     - cachetools==5.3.0
-    - certifi==2022.12.7
+    - certifi==2023.5.7
     - charset-normalizer==3.1.0
     - click==8.1.3
     - cloudpickle==2.2.1
@@ -80,7 +80,7 @@ dependencies:
     - flatbuffers==23.3.3
     - fonttools==4.39.3
     - frozenlist==1.3.3
-    - fsspec==2023.4.0
+    - fsspec==2023.5.0
     - gast==0.4.0
     - google-auth==2.17.3
     - google-auth-oauthlib==1.0.0
@@ -111,7 +111,7 @@ dependencies:
     - opt-einsum==3.3.0
     - pandas==2.0.1
     - pillow==9.5.0
-    - protobuf==4.22.4
+    - protobuf==4.23.0
     - pyarrow==12.0.0
     - pyasn1==0.5.0
     - pyasn1-modules==0.3.0
@@ -124,9 +124,9 @@ dependencies:
     - requests==2.30.0
     - requests-oauthlib==1.3.1
     - rsa==4.9
-    - ruamel-yaml==0.17.22
+    - ruamel-yaml==0.17.24
     - ruamel-yaml-clib==0.2.7
-    - s3fs==2023.4.0
+    - s3fs==2023.5.0
     - scikit-fuzzy==0.4.2
     - scikit-image==0.20.0
     - scikit-learn==1.2.2
@@ -145,8 +145,8 @@ dependencies:
     - tzdata==2023.3
     - ulid-py==1.1.0
     - urllib3==1.26.15
-    - werkzeug==2.3.3
+    - werkzeug==2.3.4
     - wrapt==1.14.1
     - xgboost==1.7.5
     - yarl==1.9.2
-prefix: myconda
+prefix: ./.conda
