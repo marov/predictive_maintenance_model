@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.dates import AutoDateLocator
 import streamlit as st
 from ml_model.ml_xgboost import XGBClassifierModel
 from predictive_maintenance.modeler import PredictiveMaintananceModeler
@@ -54,9 +55,12 @@ for i in range(-5, 6):
     y_pred = model.predict({'X': X_test})['predictions']
     points.append([inference_date, y_pred[machineID-1]])
 points = pd.DataFrame(points, columns=['datetime', 'comp_to_fail'])
+
 # display the chart with the predictions, mark the current date with a vertical line
 fig, ax = plt.subplots()
+points['datetime'] = points['datetime'].dt.strftime('%Y-%m-%d')
 ax.plot(points['datetime'], points["comp_to_fail"], label='Timeline of failures')
-ax.axvline(pd.to_datetime(str(date) + ' ' + str(time)), color='r', linestyle='--', label='Current date')
+ax.axvline(pd.to_datetime(str(date) + ' ' + str(time)).strftime('%Y-%m-%d'), color='r', linestyle='--', label='Current date')
 ax.legend()
+ax.xaxis.set_major_locator(AutoDateLocator(maxticks=10)) # to avoid overlapping dates
 st.pyplot(fig)
