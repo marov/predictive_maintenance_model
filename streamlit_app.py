@@ -14,14 +14,20 @@ forums](https://discuss.streamlit.io).
 In the meantime, below is an example of what you can do with just a few lines of code:
 """
 
-modeler = PredictiveMaintananceModeler()
-modeler.load_data() # in "real life" this would be loading from IoT sensor ETL pipeline
+@st.cache_resource
+def load_data():
+    modeler = PredictiveMaintananceModeler()
+    modeler.load_data() # in "real life" this would be loading from IoT sensor ETL pipeline
+    return modeler.labeled_features
+
+# Load data and model
+labeled_features = load_data()
 model = XGBClassifierModel()
 model.load('xgb_classifier_1st_version.pkl')
+
 inference_date = '2015-06-18 09:00:00'
 
 # Run inference
-labeled_features = modeler.labeled_features
 X_test = pd.get_dummies(labeled_features[labeled_features['datetime'] == inference_date].drop(['datetime', 'machineID', 'comp_to_fail'], axis=1))
 y_pred = model.predict({'X': X_test})['predictions']
 st.write(f"Predicted component to fail: {y_pred[0]}")

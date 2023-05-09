@@ -37,3 +37,10 @@ They make use of the generic implementation of XGBoost model (as part of H1st fr
 ## Application
 
 `predict.py` is but a demo/test script. The real application is in `streamlit_app.py`. It is a Streamlit app that uses the same model as `predict.py` to predict machine failures and visualize the results.
+To run the app locally, use:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+Streamlit cloud will automatically updat the app at <https://marov-predictive-maintenance-model-streamlit-app-0mbk0u.streamlit.app> when you push to the repo.
