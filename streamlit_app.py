@@ -12,18 +12,18 @@ from predictive_maintenance.modeler import PredictiveMaintananceModeler
 def load_data():
     modeler = PredictiveMaintananceModeler()
     modeler.load_data() # in "real life" this would be loading from IoT sensor ETL pipeline
-    return modeler.labeled_features
+    return modeler.labeled_features, modeler.split_date
 
 # Load data and model
-labeled_features = load_data()
+labeled_features, split_date = load_data()
 model = XGBClassifierModel()
 model.load('xgb_classifier_1st_version.pkl')
 
-# inference_date = '2015-06-18 09:00:00' was chosen as default, simly because it had a failure in a component
+# inference_date = '2015-09-01 09:00:00' was chosen as default, simly because it had a failure in a component
 
 # Widget to select year, month, day, hour, minute
-date = st.sidebar.date_input('Select date', pd.to_datetime('2015-06-18'),
-                                min_value=labeled_features['datetime'].min(),
+date = st.sidebar.date_input('Select date', pd.to_datetime('2015-09-01'),
+                                min_value=split_date,
                                 max_value=labeled_features['datetime'].max()
                             )
 time = st.sidebar.time_input('Select time', pd.to_datetime('09:00:00'), step=pd.to_timedelta('3 hour'))
@@ -35,11 +35,14 @@ X_test = pd.get_dummies(labeled_features[labeled_features['datetime'] == inferen
                         .drop(['datetime', 'machineID', 'comp_to_fail'], axis=1))
 y_pred = model.predict({'X': X_test})['predictions']
 
+# Dropdown to select machineID
+machineID = st.selectbox('Select machineID', labeled_features['machineID'].unique())
+
 # Display alert of y_pred[0]
-if y_pred[0] == 'none':
+if y_pred[machineID-1] == 'none':
     st.success('No component is predicted to fail')
 else:
-    st.error(f'Component **{y_pred[0][-1]}** is predicted to fail')
+    st.error(f'Component **{y_pred[machineID-1][-1]}** of machine {machineID} is predicted to fail')
 
 # Plot failures in the last 5 days and the next 5 days
 st.subheader(f"Failures in the last 5 days and the next 5 days :chart_with_upwards_trend:")
@@ -49,7 +52,7 @@ for i in range(-5, 6):
     X_test = pd.get_dummies(labeled_features[labeled_features['datetime'] == inference_date]
                             .drop(['datetime', 'machineID', 'comp_to_fail'], axis=1))
     y_pred = model.predict({'X': X_test})['predictions']
-    points.append([inference_date, y_pred[0]])
+    points.append([inference_date, y_pred[machineID-1]])
 points = pd.DataFrame(points, columns=['datetime', 'comp_to_fail'])
 # display the chart with the predictions, mark the current date with a vertical line
 fig, ax = plt.subplots()

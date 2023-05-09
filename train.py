@@ -1,7 +1,7 @@
 from predictive_maintenance.modeler import PredictiveMaintananceModeler
 
 if __name__ == '__main__':
-    modeler = PredictiveMaintananceModeler()
+    modeler = PredictiveMaintananceModeler(train_test_split_ratio=0.5)
     model = modeler.build_model()
     model.persist('1st_version')
     accuracy = model.metrics['accuracy_score'] * 100

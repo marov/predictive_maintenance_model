@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.pipeline import FeatureUnion
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split, TimeSeriesSplit
 from ml_model.ml_xgboost import XGBClassifierModel, XGBClassifierModeler
 from .feature_transformers import (transformer_error_count,
                             transformer_maint_count,
@@ -24,11 +24,13 @@ class PredictiveMaintananceModeler(XGBClassifierModeler):
         ])
         self._telemetry_feat_pipeline.set_output(transform='pandas')
         self.labeled_features = None
+        self.X_train, self.X_test, self.y_train, self.y_test = None, None, None, None
+        self.split_date = None
 
     def load_data(self):
         """Generate labeled features and split data into train and test sets
         """
-        if not self.labeled_features:
+        if not self.X_train or not self.X_test or not self.y_train or not self.y_test:
             # load data
             iot_pmfp_data_df = pd.read_feather('https://s3.us-west-1.amazonaws.com/aitomatic.us/pmfp-data/iot_pmfp_data.feather')
             iot_pmfp_labels_df = pd.read_feather('https://s3.us-west-1.amazonaws.com/aitomatic.us/pmfp-data/iot_pmfp_labels.feather')
@@ -45,10 +47,17 @@ class PredictiveMaintananceModeler(XGBClassifierModeler):
             # add labels to the data
             self.labeled_features = transformer_labeled_features.fit_transform((iot_pmfp_labels_df, final_feat)).dropna()
 
-        X = pd.get_dummies(self.labeled_features.drop(['datetime', 'machineID', 'comp_to_fail'], axis=1))
+        X = pd.get_dummies(self.labeled_features.drop(['machineID', 'comp_to_fail'], axis=1)) # we need 'datetime', for splitting data
         y = self.labeled_features['comp_to_fail']
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=self.train_test_split_ratio, shuffle=False)
 
-        prepared_data = {'X_train': X_train, 'y_train': y_train,
-                        'X_test': X_test, 'y_test': y_test}
+        # split data into train and test sets by 'datetime' column at self.train_test_split_ratio
+        dates = X['datetime'].unique()
+        split_index = int(len(dates) * self.train_test_split_ratio)
+        self.split_date = dates[split_index]
+        self.X_train, self.X_test = X[X['datetime'] < self.split_date], X[X['datetime'] >= self.split_date]
+        self.y_train, self.y_test = y[X['datetime'] < self.split_date], y[X['datetime'] >= self.split_date]
+        self.X_train, self.X_test = self.X_train.drop(['datetime'], axis=1), self.X_test.drop(['datetime'], axis=1)
+
+        prepared_data = {'X_train': self.X_train, 'y_train': self.y_train,
+                        'X_test': self.X_test, 'y_test': self.y_test}
         return prepared_data
