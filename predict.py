@@ -9,14 +9,10 @@ if __name__ == '__main__':
     inference_date = '2015-09-01 09:00:00'
 
     # Run inference
-    # labeled_features = modeler.labeled_features
-
     X = modeler.labeled_features[modeler.labeled_features['datetime'] == inference_date]
-    # X_test = modeler.X_test[modeler.X_test['datetime'] == inference_date].drop(['datetime'], axis=1)
-    # y_pred = model.predict({'X':X_test})['predictions']
     y_pred = model.predict({'X':
                              pd.get_dummies(X.drop(['datetime', 'machineID', 'comp_to_fail'], axis=1))})['predictions']
     X['comp_to_fail_pred'] = y_pred
-    print(f"Predicted component to fail:\n {X[['machineID', 'comp_to_fail_pred']]}")
-    print(f"Actual component to fail:\n {X[['machineID', 'comp_to_fail']]}")
+    print(f"Predicted component to fail on {inference_date}:\n {X[['machineID', 'comp_to_fail_pred']]}")
+    print(f"Actual component to fail on {inference_date}:\n {X[['machineID', 'comp_to_fail']]}")
 
